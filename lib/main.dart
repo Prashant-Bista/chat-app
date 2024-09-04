@@ -1,8 +1,9 @@
 import 'package:chat_app/pages/splash.dart';
+import 'package:chat_app/services/navigation_sercvice.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(Splash(onInitializationComplete: (){runApp(const MyApp());}));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,9 +15,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "ChatItOut",
       theme: ThemeData(
-        scaffoldBackgroundColor: Color.fromRGBO(11, 28, 70, 1.0)
+        scaffoldBackgroundColor: Color.fromRGBO(11, 28, 70, 1.0),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30,29,37,1.0))
       ),
-      home: Splash(onInitializationComplete: () {}),
+      home: Scaffold(
+        body: (Center(
+          child: Text("WElcome"),
+        )),
+      ),
+      navigatorKey: NavigationService().navigatorKey,
     );
   }
 }
