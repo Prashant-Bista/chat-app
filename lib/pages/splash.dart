@@ -1,3 +1,4 @@
+import 'package:chat_app/pages/login.dart';
 import 'package:chat_app/services/navigation_sercvice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +20,9 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 3)).then((_){_setup().then((_)=>widget.onInitializationComplete);
-    });
+    Future.delayed(Duration(seconds: 3));
+    _setup().then((_)=>NavigationService().navigateToPage(Login()));
+
     super.initState();
 
   }
@@ -50,11 +52,13 @@ class _SplashState extends State<Splash> {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
     _registerService();
+    print("registered");
   }
   void _registerService(){
     GetIt.instance.registerSingleton<NavigationService>(NavigationService());
     GetIt.instance.registerSingleton<MediaService>(MediaService());
     GetIt.instance.registerSingleton<CloudStorgaeService>(CloudStorgaeService());
     GetIt.instance.registerSingleton<DatabaseService>(DatabaseService());
+    print("registered");
   }
 }

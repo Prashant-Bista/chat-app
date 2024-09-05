@@ -1,9 +1,11 @@
+import 'package:chat_app/pages/login.dart';
 import 'package:chat_app/pages/splash.dart';
 import 'package:chat_app/services/navigation_sercvice.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(Splash(onInitializationComplete: (){runApp(const MyApp());}));
+  // runApp(Splash(onInitializationComplete: ()=>runApp(MyApp())));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -18,12 +20,12 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color.fromRGBO(11, 28, 70, 1.0),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30,29,37,1.0))
       ),
-      home: Scaffold(
-        body: (Center(
-          child: Text("WElcome"),
-        )),
-      ),
+      home: Login(),
       navigatorKey: NavigationService().navigatorKey,
+      routes: {
+        '/login': (_context)=>Login(),
+      },
+      initialRoute: '/login',
     );
   }
 }
