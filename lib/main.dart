@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   // runApp(Splash(onInitializationComplete: ()=>runApp(MyApp())));
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -17,15 +17,16 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "ChatItOut",
       theme: ThemeData(
-        scaffoldBackgroundColor: Color.fromRGBO(11, 28, 70, 1.0),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30,29,37,1.0))
+        scaffoldBackgroundColor: const Color.fromRGBO(11, 28, 70, 1.0),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30,29,37,1.0))
       ),
-      home: Login(),
+      home:  Login(),
       navigatorKey: NavigationService().navigatorKey,
       routes: {
-        '/login': (_context)=>Login(),
+        '/login': (context)=> Login(),
+        '/splash': (context)=>Splash(onInitializationComplete: (){runApp( Login());})
       },
-      initialRoute: '/login',
+      initialRoute: '/splash',
     );
   }
 }

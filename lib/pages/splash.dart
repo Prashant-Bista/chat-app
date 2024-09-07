@@ -1,3 +1,4 @@
+import 'package:chat_app/firebase_options.dart';
 import 'package:chat_app/pages/login.dart';
 import 'package:chat_app/services/navigation_sercvice.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,8 +21,10 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 3));
-    _setup().then((_)=>NavigationService().navigateToPage(Login()));
+    Future.delayed(const Duration(seconds: 3));
+    _setup().then((_)=>    Navigator.pushReplacementNamed(context,'/login')
+);
+
 
     super.initState();
 
@@ -31,8 +34,8 @@ class _SplashState extends State<Splash> {
     return MaterialApp(
       title: "ChatItOut",
       theme: ThemeData(
-          scaffoldBackgroundColor: Color.fromRGBO(11, 28, 70, 1.0),
-          bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30,29,37,1.0))
+          scaffoldBackgroundColor: const Color.fromRGBO(11, 28, 70, 1.0),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30,29,37,1.0))
       ),
       navigatorKey: NavigationService().navigatorKey,
       home: Scaffold(
@@ -40,7 +43,7 @@ class _SplashState extends State<Splash> {
           child: Container(
       height: 200,
               width: 200,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(image:AssetImage("assets/images/chatapplogo2.png") ,filterQuality: FilterQuality.high,fit: BoxFit.fill)
             ),
           ),
@@ -50,9 +53,12 @@ class _SplashState extends State<Splash> {
   }
   Future<void> _setup() async{
     WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
+    print("BIndingensureInitialized");
+
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+    
     _registerService();
-    print("registered");
+
   }
   void _registerService(){
     GetIt.instance.registerSingleton<NavigationService>(NavigationService());

@@ -6,6 +6,6 @@ const StringMessage_Collection ="Messages";
 
 class DatabaseService{
   final FirebaseFirestore db = FirebaseFirestore.instance;
-  DatabaseService(){}
+  DatabaseService();
 
 }

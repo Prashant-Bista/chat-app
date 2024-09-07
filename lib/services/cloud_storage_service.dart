@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 const String User_Collection ="users";
 class CloudStorgaeService{
   final FirebaseFirestore _storage = FirebaseFirestore.instance;
-  CloudStorgaeService() {
-  }
+  CloudStorgaeService();
 
 }
