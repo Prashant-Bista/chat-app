@@ -63,7 +63,7 @@ class _SplashState extends State<Splash> {
   void _registerService(){
     GetIt.instance.registerSingleton<NavigationService>(NavigationService());
     GetIt.instance.registerSingleton<MediaService>(MediaService());
-    GetIt.instance.registerSingleton<CloudStorgaeService>(CloudStorgaeService());
+    GetIt.instance.registerSingleton<CloudStorageService>(CloudStorageService());
     GetIt.instance.registerSingleton<DatabaseService>(DatabaseService());
     print("registered");
   }

@@ -1,6 +1,10 @@
 import 'package:chat_app/components.dart';
+import 'package:chat_app/providers/authentication_provider.dart';
+import 'package:chat_app/services/navigation_sercvice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -15,10 +19,16 @@ class _LoginState extends State<Login> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool makeInvisible = true;
 
+  String? email;
+  String? _password;
   @override
   Widget build(BuildContext context) {
     double widthDevice = MediaQuery.of(context).size.width;
     double heightDevice = MediaQuery.of(context).size.height;
+    late AuthenticationProvider _auth;
+    late NavigationService _navigation;
+    _auth=Provider.of<AuthenticationProvider>(context);
+    _navigation = GetIt.instance.get<NavigationService>();
     return Scaffold(
       backgroundColor: const Color.fromRGBO(11, 28, 70, 1.0),
       body: Column(
