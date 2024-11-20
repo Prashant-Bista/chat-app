@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'chatt-app-cafbe.appspot.com',
     measurementId: 'G-TS76J53DGG',
   );
+
 }

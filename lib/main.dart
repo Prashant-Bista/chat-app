@@ -1,40 +1,36 @@
-import 'package:chat_app/pages/login.dart';
-import 'package:chat_app/pages/splash.dart';
-import 'package:chat_app/providers/authentication_provider.dart';
-import 'package:chat_app/services/navigation_sercvice.dart';
+import 'package:chat_app/pages/splash_page.dart';
+import 'package:chat_app/services/navigation_service.dart';
 import 'package:flutter/material.dart';
+import 'package:chat_app/pages/login_page.dart';
 import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() {
-  // runApp(Splash(onInitializationComplete: ()=>runApp(MyApp())));
-  runApp( Splash(onInitializationComplete:(){ runApp(MyApp());}));
+  runApp(SplashPage(key: UniqueKey(), onInitializationComplete: () {
+    runApp(MainApp());
+  }));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AuthenticationProvider>(create: (BuildContext context) {
-          return AuthenticationProvider();
-        })],
-      child: MaterialApp(
-        title: "ChatItOut",
-        theme: ThemeData(
-          scaffoldBackgroundColor: const Color.fromRGBO(11, 28, 70, 1.0),
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30,29,37,1.0))
-        ),
-        home:  Login(),
-        navigatorKey: NavigationService().navigatorKey,
-        routes: {
-          '/login': (context)=> Login(),
-          '/splash': (context)=>Splash(onInitializationComplete: (){runApp( MyApp());})
-        },
-        initialRoute: '/splash',
+    return MaterialApp(
+      title: "ChatItOut",
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color.fromRGBO(11, 28, 70, 1.0),
+        bottomNavigationBarTheme:
+        BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30, 29, 37, 1.0)),
       ),
+      home: LoginPage(),
+      navigatorKey: NavigationService.navigatorKey,
+      initialRoute: "/login",  // Start with login page
+      routes: {
+        "/login": (BuildContext context) => LoginPage(),
+      },
     );
   }
 }
