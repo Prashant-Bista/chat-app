@@ -1,16 +1,16 @@
 import 'package:chat_app/pages/splash_page.dart';
+import 'package:chat_app/providers/authentication_provider.dart';
 import 'package:chat_app/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:chat_app/pages/login_page.dart';
 import 'package:provider/provider.dart';
-import 'package:get_it/get_it.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:chat_app/pages/home_page.dart';
 
 void main() {
   runApp(SplashPage(key: UniqueKey(), onInitializationComplete: () {
     runApp(MainApp());
   }));
+
 }
 
 class MainApp extends StatelessWidget {
@@ -18,19 +18,27 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "ChatItOut",
-      theme: ThemeData(
-        scaffoldBackgroundColor: const Color.fromRGBO(11, 28, 70, 1.0),
-        bottomNavigationBarTheme:
-        BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30, 29, 37, 1.0)),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthenticationProvider>(create: (BuildContext _context){
+          return AuthenticationProvider();
+        })
+      ],
+      child: MaterialApp(
+        title: "ChatItOut",
+        theme: ThemeData(
+          scaffoldBackgroundColor: const Color.fromRGBO(11, 28, 70, 1.0),
+          bottomNavigationBarTheme:
+          BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30, 29, 37, 1.0)),
+        ),
+        home: LoginPage(),
+        navigatorKey: NavigationService.navigatorKey,
+        routes: {
+          "/login": (BuildContext context) => LoginPage(),
+          "/home": (BuildContext context) => HomePage(),
+
+        },
       ),
-      home: LoginPage(),
-      navigatorKey: NavigationService.navigatorKey,
-      initialRoute: "/login",  // Start with login page
-      routes: {
-        "/login": (BuildContext context) => LoginPage(),
-      },
     );
   }
 }

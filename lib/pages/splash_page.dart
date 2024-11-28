@@ -52,13 +52,11 @@ class _SplashPageState extends State<SplashPage> {
     WidgetsFlutterBinding.ensureInitialized();
     try {
       await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-      print("initialized"); // This should print after Firebase initializes
     } catch (e) {
       print("Error initializing Firebase: $e");
     }
 
     _registerServices();
-    print("registered");
   }
 
 
