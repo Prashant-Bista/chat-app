@@ -25,14 +25,19 @@ class _RegisterPageState extends State<RegisterPage> {
   late double _deviceWidth;
   late String _email;
   late String _password;
-  PlatformFile? _profileImage;
-  GlobalKey<FormState> _registerFormKey= GlobalKey<FormState>();
+  late String _name;
 
+  PlatformFile? _profileImage;
+  late AuthenticationProvider  _authProv;
+  CloudStorageService _cloudStorageService = CloudStorageService();
+  DatabaseService _dbService = DatabaseService();
+  GlobalKey<FormState> _registerFormKey= GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     _deviceWidth= MediaQuery.of(context).size.width;
     _deviceHeight= MediaQuery.of(context).size.height;
+    _authProv = Provider.of<AuthenticationProvider>(context);
     return _buildUI();
   }
 
@@ -61,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     },
                     regEx: r'.{1,}',
                     hintText: 'Name',
-                    obscureText: true,
+                    obscureText: false,
                   ),
                 ),
                     SizedBox(height: 20,),
@@ -90,7 +95,17 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 SizedBox(height: 20,),
                 RoundedButton(name: "Register", height: _deviceWidth*0.06, width: _deviceWidth*0.25, onpressed: () async{
-                  _registerFormKey.currentState!.validate();
+                 if(_registerFormKey.currentState!.validate() && _profileImage!=null){
+                   _registerFormKey.currentState!.save();
+                   print("email:${_email}\npassword:${_password}");
+                   String? _uid= await _authProv.signUpWithEmailAndPassword(_email,_password);
+                   String? _imageUrl =await _cloudStorageService.saveUserImageToStorage(_uid!, _profileImage!);
+                   print(_imageUrl);
+                   await _dbService.createUser(_uid, _name, _imageUrl!, _email);
+                   _authProv.setUser(_uid);
+
+
+                 }
                 })
               ]),
         ),
@@ -135,3 +150,4 @@ class _RegisterPageState extends State<RegisterPage> {
   );
   }
 }
+

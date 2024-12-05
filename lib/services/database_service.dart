@@ -27,4 +27,12 @@ class DatabaseService{
       print("databaseSErvice error");
     }
   }
-}
+  Future<void> createUser(String _uid,String _name,String _imageURL,String _email) async{
+    try {
+      await _db.collection(USER_COLLECTION).doc(_uid).set({"name":_name,"image_url":_imageURL,"email":_email,"last_active":DateTime.now().toUtc()});
+      print("user creation happened");
+    }catch(e){
+      print(e);
+    }
+    }
+  }
