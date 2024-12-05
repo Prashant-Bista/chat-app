@@ -97,7 +97,9 @@ class _LoginPageState extends State<LoginPage> {
         "Don't have an account",
         style: TextStyle(color: Colors.blueAccent),
       ),
-      onTap: () {},
+      onTap: () {
+        _navigation.navigateToRoute('/register');
+      },
     );
   }
 }

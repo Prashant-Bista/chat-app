@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:chat_app/pages/login_page.dart';
 import 'package:provider/provider.dart';
 import 'package:chat_app/pages/home_page.dart';
+import 'pages/register_page.dart';
 
 void main() {
   runApp(SplashPage(key: UniqueKey(), onInitializationComplete: () {
     runApp(MainApp());
-  }));
+  })
+);
 
 }
 
@@ -31,11 +33,13 @@ class MainApp extends StatelessWidget {
           bottomNavigationBarTheme:
           BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30, 29, 37, 1.0)),
         ),
-        home: LoginPage(),
+        home: RegisterPage(),
         navigatorKey: NavigationService.navigatorKey,
         routes: {
           "/login": (BuildContext context) => LoginPage(),
           "/home": (BuildContext context) => HomePage(),
+          "/register": (BuildContext context) => RegisterPage(),
+
 
         },
       ),
