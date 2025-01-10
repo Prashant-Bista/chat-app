@@ -32,6 +32,7 @@ class DatabaseService{
       await _db.collection(USER_COLLECTION).doc(_uid).set({"name":_name,"image_url":_imageURL,"email":_email,"last_active":DateTime.now().toUtc()});
       print("user creation happened");
     }catch(e){
+      print("user saving error");
       print(e);
     }
     }

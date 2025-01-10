@@ -17,27 +17,17 @@ class AuthenticationProvider extends ChangeNotifier{
     _auth = FirebaseAuth.instance;
     _navigationService = GetIt.instance.get<NavigationService>();
     _databaseService = GetIt.instance.get<DatabaseService>();
-    // _auth.authStateChanges().listen((User? _user) {
-    //   if (_user != null) {
-    //     print(_user.uid);
-    //     _databaseService.updateUserLastSeenTime(_user.uid);
-    //     print("user last seen Updated");
-    //     _databaseService.createUser(_user.uid, "", "", _user.email!);
-    //     _databaseService.getUser(_user.uid).then((_snapShot) {
-    //       Map<String, dynamic> _userData = _snapShot.data()! as Map<String, dynamic>;
-    //       user = ChatUser.fromJSON({
-    //         "uid": _user.uid,
-    //         "name": _userData["name"],
-    //         "email": _userData["email"],
-    //         "last_active": _userData["last_active"],
-    //         "image": _userData["image"]
-    //       },);
-    //       _navigationService.removeAndNavigateToRoute('/home');
-    //     },);
-    //   } else {
-    //     _navigationService.removeAndNavigateToRoute('/login');
-    //   }
-    // });
+    _auth.authStateChanges().listen((User? _user) {
+      if (_user != null) {
+        print(_user.uid);
+  _databaseService.updateUserLastSeenTime(_user.uid);
+        print("user last seen Updated");
+    setUser(user.uid);
+          _navigationService.removeAndNavigateToRoute('/home');
+        } else {
+        _navigationService.removeAndNavigateToRoute('/login');
+      }
+    });
   }
   Future<void> loginUsingEmailAndPassword(String _email,String _password) async {
     try {
@@ -56,8 +46,8 @@ print(e);
       UserCredential credentials= await _auth.createUserWithEmailAndPassword(email: _email, password: _password);
       print("signup happened");
       return credentials.user!.uid;
-    }on FirebaseAuthException{
-      print("Error registering user into Firebase");
+    }on FirebaseAuthException catch (e){
+      print(e.code);
     }catch(e){
       print(e);
     }
@@ -73,7 +63,7 @@ print(e);
           "name": _userData["name"],
           "email": _userData["email"],
           "last_active": _userData["last_active"],
-          "image": _userData["image"]
+          "image": _userData["image_url"]
         },);
         _navigationService.removeAndNavigateToRoute('/home');
       },);

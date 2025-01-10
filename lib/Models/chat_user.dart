@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ChatUser{
   final String uid;
   final String name;
@@ -12,7 +14,21 @@ required this.name,
   required this.imageURL
   });
   factory ChatUser.fromJSON(Map<String,dynamic> _json){
-    return ChatUser(uid: _json["uid"], name: _json["name"], email: _json["email"], lastActive: _json["last_active"].toDate(), imageURL: _json["image"]);
+    try{
+      DateTime lastActive;
+
+      if (_json["last_active"] is Timestamp) {
+        lastActive = (_json["last_active"] as Timestamp).toDate();
+      } else if (_json["last_active"] is String) {
+        lastActive = DateTime.parse(_json["last_active"]);
+      } else {
+        lastActive = DateTime.now(); // Fallback in case of null or unexpected type
+      }
+      return ChatUser(uid: _json["uid"], name: _json["name"], email: _json["email"], lastActive: _json["last_active"].toDate(), imageURL: _json["image"]);
+    }catch(e){
+      print(e);
+      return ChatUser(uid: _json["uid"], name: _json["name"], email: _json["email"], lastActive: _json["last_active"].toDate(), imageURL: _json["image"]);
+    }
   }
   Map<String,dynamic> toMap(){
     return{

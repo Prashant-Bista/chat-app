@@ -62,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: _deviceWidth*0.8,
                   child: CustomFormField(
                     onSaved: (value) {
-                      _password = value;
+                      _name = value;
                     },
                     regEx: r'.{1,}',
                     hintText: 'Name',
@@ -102,7 +102,6 @@ class _RegisterPageState extends State<RegisterPage> {
                    String? _imageUrl =await _cloudStorageService.saveUserImageToStorage(_uid!, _profileImage!);
                    print(_imageUrl);
                    await _dbService.createUser(_uid, _name, _imageUrl!, _email);
-                   _authProv.setUser(_uid);
 
 
                  }
