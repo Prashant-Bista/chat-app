@@ -29,11 +29,19 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         title: "ChatItOut",
         theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            centerTitle: true,
+            backgroundColor: const Color.fromRGBO(11, 28, 70, 1.0),
+            titleTextStyle: TextStyle(color: Colors.white,fontSize: 35,fontWeight: FontWeight.bold),
+            iconTheme: IconThemeData(
+              color: Colors.white
+            )
+          ),
           scaffoldBackgroundColor: const Color.fromRGBO(11, 28, 70, 1.0),
           bottomNavigationBarTheme:
           BottomNavigationBarThemeData(backgroundColor: Color.fromRGBO(30, 29, 37, 1.0)),
         ),
-        home: RegisterPage(),
+        home: HomePage(),
         navigatorKey: NavigationService.navigatorKey,
         routes: {
           "/login": (BuildContext context) => LoginPage(),

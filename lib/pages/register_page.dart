@@ -1,3 +1,4 @@
+import 'package:chat_app/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:get_it/get_it.dart';
@@ -21,7 +22,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  late double _deviceHeight;
   late double _deviceWidth;
   late String _email;
   late String _password;
@@ -31,12 +31,12 @@ class _RegisterPageState extends State<RegisterPage> {
   late AuthenticationProvider  _authProv;
   CloudStorageService _cloudStorageService = CloudStorageService();
   DatabaseService _dbService = DatabaseService();
+  NavigationService _navigation = new NavigationService();
   GlobalKey<FormState> _registerFormKey= GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     _deviceWidth= MediaQuery.of(context).size.width;
-    _deviceHeight= MediaQuery.of(context).size.height;
     _authProv = Provider.of<AuthenticationProvider>(context);
     return _buildUI();
   }
@@ -102,10 +102,14 @@ class _RegisterPageState extends State<RegisterPage> {
                    String? _imageUrl =await _cloudStorageService.saveUserImageToStorage(_uid!, _profileImage!);
                    print(_imageUrl);
                    await _dbService.createUser(_uid, _name, _imageUrl!, _email);
+                   await _authProv.logout();
+                   await _authProv.loginUsingEmailAndPassword(_email, _password);
 
 
                  }
-                })
+                }),
+                SizedBox(height: 20,),
+                _gotoLogin()
               ]),
         ),
       ),
@@ -148,5 +152,17 @@ class _RegisterPageState extends State<RegisterPage> {
     }(),
   );
   }
+  Widget _gotoLogin(){
+    return InkWell(
+      child: Text(
+        "Already signed up?",
+        style: TextStyle(color: Colors.blueAccent),
+      ),
+      onTap: () {
+        _navigation.navigateToRoute('/login');
+      },
+    );
+  }
+
 }
 

@@ -19,10 +19,18 @@ class AuthenticationProvider extends ChangeNotifier{
     _databaseService = GetIt.instance.get<DatabaseService>();
     _auth.authStateChanges().listen((User? _user) {
       if (_user != null) {
-        print(_user.uid);
   _databaseService.updateUserLastSeenTime(_user.uid);
-        print("user last seen Updated");
-    setUser(user.uid);
+  _databaseService.getUser(_user.uid).then((_snapshot){
+    Map<String,dynamic>_userData= _snapshot.data()! as Map<String,dynamic>;
+    user = ChatUser.fromJSON({
+            "uid": _user.uid,
+            "name": _userData["name"],
+            "email": _userData["email"],
+            "last_active": _userData["last_active"],
+            "image": _userData["image_url"],
+          });
+  });
+  print(user);
           _navigationService.removeAndNavigateToRoute('/home');
         } else {
         _navigationService.removeAndNavigateToRoute('/login');
