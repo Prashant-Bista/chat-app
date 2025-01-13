@@ -24,33 +24,39 @@ class CustomListViewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap(),
-      minVerticalPadding: height*0.20,
-      leading: SizedBox(
-        width: 55,
-        child: Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.bottomRight,
-          children: [CircleAvatar(
-            radius: 200,
-            backgroundImage: NetworkImage(imagePath),
+    return SizedBox(height: 20,
+      child: ListTile(
+        tileColor: Colors.grey,
+        onTap: onTap(),
+        minVerticalPadding: height*0.20,
+        leading: SizedBox(
+          width: 55,
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.bottomRight,
+            children: [CircleAvatar(
+              radius: 200,
+              backgroundImage: NetworkImage(imagePath),
+            ),
+            CircleAvatar(
+              radius: 5,
+              backgroundColor: isActive?Colors.green:Colors.red,
+            )]
           ),
-          CircleAvatar(
-            radius: 5,
-            backgroundColor: isActive?Colors.green:Colors.red,
-          )]
         ),
+        title: Text(title,style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500,),),
+        subtitle: isActivity?SizedBox(
+          height: 20,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SpinKitThreeBounce(color: Colors.white54,size: height*0.1,),
+            ],
+          ),
+        ):Text(subtitle,style: TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.w400),),
       ),
-      title: Text(title,style: TextStyle(color: Colors.white,fontSize: 18,fontWeight: FontWeight.w500,),),
-      subtitle: isActivity?Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SpinKitThreeBounce(color: Colors.white54,size: height*0.10,),
-        ],
-      ):Text(subtitle,style: TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.w400),),
     );
   }
 }

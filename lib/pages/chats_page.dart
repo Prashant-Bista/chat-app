@@ -49,6 +49,7 @@ class _ChatsPageState extends State<ChatsPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _chatsList(),
+
             ],
           ),
         );
@@ -56,7 +57,7 @@ class _ChatsPageState extends State<ChatsPage> {
     );
   }
   Widget _chatsList(){
-    return Expanded(child: _chatTile())
+    return Expanded(child: _chatTile());
   }
   Widget _chatTile(){
     return CustomListViewTile(height: _deviceHeight*0.1, title: "Prashant Bista", subtitle: "Hello", imagePath: "https://i.pravatar.cc/150?img=3",
