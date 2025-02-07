@@ -98,12 +98,11 @@ class _RegisterPageState extends State<RegisterPage> {
                  if(_registerFormKey.currentState!.validate() && _profileImage!=null){
                    _registerFormKey.currentState!.save();
                    print("email:${_email}\npassword:${_password}");
-                   String? _uid= await _authProv.signUpWithEmailAndPassword(_email,_password);
+                   String? _uid= await _authProv.registerUserUsingEmailAndPassword(_email,_password);
                    String? _imageUrl =await _cloudStorageService.saveUserImageToStorage(_uid!, _profileImage!);
                    print(_imageUrl);
                    await _dbService.createUser(_uid, _name, _imageUrl!, _email);
                    await _authProv.logout();
-                   await _authProv.loginUsingEmailAndPassword(_email, _password);
 
 
                  }

@@ -86,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
           loginFormKey.currentState!.save();
           _auth.loginUsingEmailAndPassword(
               _email.toString(), _password.toString());
+          _navigation.removeAndNavigateToRoute("/chats_page");
         }
       },
     );

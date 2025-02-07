@@ -1,3 +1,4 @@
+import 'package:chat_app/pages/chats_page.dart';
 import 'package:chat_app/pages/splash_page.dart';
 import 'package:chat_app/providers/authentication_provider.dart';
 import 'package:chat_app/services/navigation_service.dart';
@@ -47,6 +48,7 @@ class MainApp extends StatelessWidget {
           "/login": (BuildContext context) => LoginPage(),
           "/home": (BuildContext context) => HomePage(),
           "/register": (BuildContext context) => RegisterPage(),
+          "/chats_page":(BuildContext context) => ChatsPage()
 
 
         },

@@ -1,64 +1,94 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
+//Packages
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:chat_app/services/database_service.dart';
+//Services
+import '../Models/chat.dart';
+import '../Models/chat_message.dart';
+import '../Models/chat_user.dart';
+import '../services/database_service.dart';
 
-import 'authentication_provider.dart';
+//Providers
+import '../providers/authentication_provider.dart';
 
-import 'package:chat_app/Models/chat_user.dart';
-import 'package:chat_app/Models/chat.dart';
-import 'package:chat_app/Models/chat_message.dart';
+//Models
 
-
-class ChatsPageProvider extends ChangeNotifier{
+class ChatsPageProvider extends ChangeNotifier {
   AuthenticationProvider _auth;
+
   late DatabaseService _db;
+
   List<Chat>? chats;
-  late StreamSubscription _chatStream;
-  ChatsPageProvider(this._auth){
-    _db=GetIt.instance.get<DatabaseService>();
+bool _mounted=true;
+  StreamSubscription? _chatsStream;
+
+  ChatsPageProvider(this._auth) {
+    _db = GetIt.instance.get<DatabaseService>();
     getChats();
   }
   @override
   void dispose() {
-    _chatStream.cancel();
+    _mounted=false;
+    _chatsStream?.cancel(); // ✅ Cancel the stream to prevent updates after disposal
     super.dispose();
   }
-  void getChats() async{
-    try{
-      _chatStream = _db.getChatsForUser(_auth.user.uid).listen((_snapshot) async{
-        chats= await Future.wait(_snapshot.docs.map((_doc)async {
-          Map<String,dynamic> _chatData = _doc.data() as Map<String,dynamic>;
-          //Get Users in chat
-          List<ChatUser> _members=[];
-          for(var _uid in _chatData["members"]){
-            DocumentSnapshot _userSnapshot = await _db.getUser(_uid);
-            Map<String,dynamic> _userData= _userSnapshot.data() as Map<String,dynamic>;
-            _members.add(ChatUser.fromJSON(_userData));
-          }
-          //Get last messages
-          List<ChatMessage> _messages =[];
-          QuerySnapshot _chatMessage = await _db.getLastMessageForChat(_doc.id);
-          if(_chatMessage.docs.isNotEmpty){
-            Map<String,dynamic> _messageData = _chatMessage.docs.first.data()! as Map<String,dynamic>;
-            ChatMessage _message  = ChatMessage.fromJson(_messageData);
-            _messages.add(_message);
-          }
-          //Return chat Instance
-          return Chat(uid: _doc.id, currentUserUid: _auth.user.uid, members: _members, messages: _messages, activity: _chatData["is_activity"], group:  _chatData["is_group"]);
-        }).toList()) ;
-        notifyListeners();
+
+
+  void getChats() async {
+    try {
+      _chatsStream =
+          _db.getChatsForUser(_auth.user.uid).listen((_snapshot) async {
+        chats = await Future.wait(
+          _snapshot.docs.map(
+            (_d) async {
+              Map<String, dynamic> _chatData =
+                  _d.data() as Map<String, dynamic>;
+              //Get list of members
+              List<ChatUser> _members = [];
+              for (var _uid in _chatData["members"]) {
+                DocumentSnapshot _userSnapshot = await _db.getUser(_uid);
+                Map<String, dynamic> _userData =
+                    _userSnapshot.data() as Map<String, dynamic>;
+                _userData["uid"] = _userSnapshot.id;
+                _members.add(
+                  ChatUser.fromJSON(_userData),
+                );
+              }
+              //Get Last Message For Chat
+              List<ChatMessage> _messages = [];
+              QuerySnapshot _chatMessage =
+                  await _db.getLastMessageForChat(_d.id);
+              print("last message recieved");
+              if (_chatMessage.docs.isNotEmpty) {
+                Map<String, dynamic> _messageData =
+                    _chatMessage.docs.first.data()! as Map<String, dynamic>;
+                print(_messageData);
+                ChatMessage _message = ChatMessage.fromJson(_messageData);
+                _messages.add(_message);
+                print("message added");
+              }
+              //Return Chat Instance
+              return Chat(
+                uid: _d.id,
+                currentUserUid: _auth.user.uid,
+                members: _members,
+                messages: _messages,
+                activity: _chatData["is_activity"],
+                group: _chatData["is_group"],
+              );
+            },
+          ).toList(),
+        );
+        if(_mounted){
+          notifyListeners();
+        }
       });
-    }catch(e){
-      print("Error getting chats");
+    } catch (e) {
+      print("Error getting chats.");
       print(e);
     }
-
   }
-
-
 }

@@ -20,7 +20,7 @@ class ChatMessage{
 });
   factory ChatMessage.fromJson(Map<String,dynamic> _json){
     MessageType _messageType;
-    switch(_json["type"]){
+    switch(_json["type "]){
       case "text":
         _messageType = MessageType.TEXT;
         break;
@@ -30,7 +30,8 @@ class ChatMessage{
       default:
         _messageType = MessageType.UNKNOWN;
     }
-    return ChatMessage(content: _json["content"], type: _messageType, senderId: _json["sender_id"], sentTime: _json["sent_time"].toDate());
+    print("messagetype set");
+    return ChatMessage(content: _json["content "], type: _messageType, senderId: _json["sender_id"], sentTime: _json["sent_time"].toDate());
 
   }
   Map<String,dynamic> toJson(){
