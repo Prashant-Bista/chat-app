@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:chat_app/Models/chat_message.dart';
@@ -24,10 +25,9 @@ class CustomListViewTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(height: 20,
+    return SizedBox(height: 75,
       child: ListTile(
-        tileColor: Colors.grey,
-        onTap: onTap(),
+        onTap: ()=>onTap(),
         minVerticalPadding: height*0.20,
         leading: SizedBox(
           width: 55,

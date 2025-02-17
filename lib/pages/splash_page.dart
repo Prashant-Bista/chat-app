@@ -4,6 +4,7 @@ import 'package:chat_app/services/media_services.dart';
 import 'package:chat_app/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 
 import '../services/database_service.dart';
@@ -48,9 +49,15 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> _setup() async {
+
     WidgetsFlutterBinding.ensureInitialized();
     try {
       await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      FirebaseFirestore.instance.settings = const Settings(
+        persistenceEnabled: false, // Disable offline persistence to ensure real-time data fetch
+      );
+      FirebaseFirestore.instance.clearPersistence(); // Clear cached data (optional)
+      FirebaseFirestore.instance.enableNetwork();
     } catch (e) {
       print("Error initializing Firebase: $e");
     }

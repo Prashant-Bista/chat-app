@@ -1,9 +1,12 @@
 import 'package:chat_app/Models/chat_message.dart';
 import 'package:chat_app/Models/chat_user.dart';
+import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/providers/authentication_provider.dart';
 import 'package:chat_app/providers/chats_page_provider.dart';
+import 'package:chat_app/services/navigation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 
 import 'package:chat_app/widgets/custom_list_view_tiles.dart';
@@ -18,6 +21,7 @@ class ChatsPage extends StatefulWidget {
 }
 
 class _ChatsPageState extends State<ChatsPage> {
+ late NavigationService _nav ;
   late AuthenticationProvider _auth;
   late ChatsPageProvider _pageProvider;
 
@@ -28,7 +32,8 @@ class _ChatsPageState extends State<ChatsPage> {
   Widget build(BuildContext context) {
     _deviceWidth = MediaQuery.of(context).size.width;
     _deviceHeight = MediaQuery.of(context).size.height;
-
+    _nav= GetIt.instance.get<NavigationService>();
+    _auth = Provider.of<AuthenticationProvider>(context);
     return MultiProvider(providers: [
       ChangeNotifierProvider<ChatsPageProvider>(
           create: (_) => ChatsPageProvider(_auth)),
@@ -36,7 +41,7 @@ class _ChatsPageState extends State<ChatsPage> {
   }
 
   Widget _buildUI() {
-    _auth = Provider.of<AuthenticationProvider>(context);
+
     return Builder(builder: (context) {
       _pageProvider = context.watch<ChatsPageProvider>();
       return Scaffold(
@@ -106,11 +111,13 @@ class _ChatsPageState extends State<ChatsPage> {
     }
     return CustomListViewTile(
         height: _deviceHeight * 0.1,
-        title: "Prashant Bista",
-        subtitle: "Hello",
-        imagePath: "https://i.pravatar.cc/150?img=3",
-        onTap: () {},
-        isActive: false,
-        isActivity: true);
+        title: _chat.title(),
+        subtitle: _subtitleText,
+        imagePath: _chat.imageURL(),
+        onTap: () {
+          _nav.navigateToPage(ChatPage(chat:_chat));
+        },
+        isActive: _isactive,
+        isActivity: _chat.activity);
   }
 }

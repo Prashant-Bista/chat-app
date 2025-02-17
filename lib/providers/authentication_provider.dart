@@ -26,9 +26,12 @@ class AuthenticationProvider extends ChangeNotifier {
 
     _auth.authStateChanges().listen((_user) async{
       if (_user != null) {
+        await _auth.currentUser?.getIdToken(true);
         _databaseService.updateUserLastSeenTime(_user.uid);
         print("UserLastSeenUpdated");
        try{
+         print(_auth.currentUser!.uid);
+         print(_user.uid);
         await _databaseService.getUser(_user.uid).then(
                (_snapshot) {
              Map<String, dynamic> _userData =

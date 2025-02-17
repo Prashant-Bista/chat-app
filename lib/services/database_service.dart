@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../Models/chat_message.dart';
+
 const String USER_COLLECTION ="users";
 const String CHAT_COLLECTION ="chats";
 const String MESSAGE_COLLECTION ="messages";
@@ -9,6 +11,7 @@ class DatabaseService{
   DatabaseService(){}
   Future<DocumentSnapshot> getUser(String _uid) async {
     try {
+      print(_uid);
       DocumentSnapshot snapshot = await _db.collection(USER_COLLECTION).doc(_uid).get();
       print("user recieved");
       return snapshot;
@@ -40,4 +43,30 @@ class DatabaseService{
     Future<QuerySnapshot> getLastMessageForChat(String _chatId){
     return _db.collection(CHAT_COLLECTION).doc(_chatId).collection(MESSAGE_COLLECTION).orderBy("sent_time",descending: true).limit(1).get();
     }
+    Stream<QuerySnapshot> streamMessagesForChat(String _chatID){
+    return _db.collection(CHAT_COLLECTION).doc(_chatID).collection(MESSAGE_COLLECTION).orderBy("Sent_time",descending: false).snapshots();
+    }
+    Future<void>deleteChat(String _chatID) async {
+      try {
+        await _db.collection(CHAT_COLLECTION).doc(_chatID).delete();
+      } catch (e) {
+        print(e);
+      }
+    }
+    Future<void> addMessageToChat(String _chatId, ChatMessage _message) async{
+      try{
+        await _db.collection(CHAT_COLLECTION).doc(_chatId).collection(MESSAGE_COLLECTION).add(_message.toJson());
+      }catch(e){
+        print(e);
+      }
+    }
+    Future<void> updateChatData(String _chatId, Map<String,dynamic>_data)async{
+    try{
+      await _db.collection(CHAT_COLLECTION).doc(_chatId).update(_data);
+    }
+    catch(e){
+      print(e);
+    }
+
+}
   }
