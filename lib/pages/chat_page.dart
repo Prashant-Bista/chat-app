@@ -64,12 +64,96 @@ class _ChatPageState extends State<ChatPage> {
 
                   }, icon: Icon(Icons.delete,color: Colors.blue),),
                   secondaryAction: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back,color: Colors.blue,)),),
+                _messagesListView(),
+                _sendMessageForm()
               ],
             ),
-
           ),
         ),
       );
     });
   }
+  Widget _messagesListView(){
+  if(_pageProvider.messages!=null){
+    print(_pageProvider.messages!.length);
+    if(_pageProvider.messages!.length!=0){
+      return Container(
+        height: _deviceHeight*0.70,child: ListView.builder(itemCount:_pageProvider.messages!.length,itemBuilder: (BuildContext context,int _index){
+          ChatMessage _message= _pageProvider.messages![_index];
+          bool _isOwnMessage = _message.senderId == _auth.user.uid;
+          return Container(
+            child: CustomChatListViewTile(width: _deviceWidth, deviceWidth: _deviceHeight, isOwnMessage: _isOwnMessage, message: _message, sender: this.widget.chat.members.where((_m)=>_m.uid==_message.senderId).first),
+          );
+      },),
+      );
+    }
+    else{
+      return Align(alignment: Alignment.center,child: Text("Be the first one to say Hi!.",style: TextStyle(color: Colors.white),),);
+
+    }
+  }
+  else
+    {
+      return Center(child: CircularProgressIndicator(color: Colors.white,));
+    }
+
+}
+Widget _sendMessageForm(){
+  return Container(
+    height: _deviceHeight*0.06,
+    decoration: BoxDecoration(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(10)
+    ),
+    margin: EdgeInsets.symmetric(horizontal: _deviceWidth*0.04,vertical: _deviceHeight*0.03),
+    child: Form(
+      key: _messageFormState,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _messageTextField(),
+          _sendMessageButton(),
+          _imageMessageButton()
+        ],
+      ),
+    ),
+
+  );
+
+}
+Widget _messageTextField(){
+  return   SizedBox(
+    width: _deviceWidth*0.70,
+    child: CustomFormField(onSaved: (_value){
+      _pageProvider.message=_value;
+    }, regEx:r"^(?!\s*$).+", hintText: "Type a message", obscureText: false)
+  );
+
+}
+Widget _sendMessageButton(){
+  double _size = _deviceHeight *0.04;
+  return Container(
+    height: _size,
+    width: _size,
+    child: IconButton(onPressed: (){
+      if(_messageFormState.currentState!.validate()){
+        _messageFormState.currentState!.save();
+        _pageProvider.sendTextMessage();
+        _messageFormState.currentState!.reset();
+
+      }
+    }, icon:Icon(Icons.send) ,color: Colors.white,),
+  );
+}
+  Widget _imageMessageButton(){
+    double _size = _deviceHeight *0.04;
+    return Container(
+      height: _size,
+      width: _size,
+      child: FloatingActionButton(onPressed: (){}, backgroundColor:Color.fromRGBO(0, 80, 220, 1.0),child: Icon(Icons.camera_enhance), ),
+    );
+  }
+
 }

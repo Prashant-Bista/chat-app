@@ -28,12 +28,16 @@ class ChatPageProvider extends ChangeNotifier{
 
 
   String get message{
-    return message;
+    return _message!;
+  }
+   set message(String value){
+     _message=value;
   }
   ChatPageProvider(this._chatID,this._auth,this._messagesListViewController){
     _db = GetIt.instance.get<DatabaseService>();
     _media = GetIt.instance.get<MediaService>();
     _navigation = GetIt.instance.get<NavigationService>();
+    listenToMessages();
   }
   @override
   void dispose() {
@@ -47,6 +51,7 @@ class ChatPageProvider extends ChangeNotifier{
           Map<String,dynamic> _messageData =  _m.data() as Map<String,dynamic>;
           return ChatMessage.fromJson(_messageData);
       }).toList();
+        print("Messages parsed: ${_messages.length}");
         messages = _messages;
         notifyListeners();
     });
@@ -54,6 +59,30 @@ class ChatPageProvider extends ChangeNotifier{
       print("Erorr getting messages");
       print(e);
     }
+  }
+  void sendTextMessage()async {
+    if(_message!=null){
+      ChatMessage _messageToSend = ChatMessage(content: _message!, type: MessageType.TEXT, senderId: _auth.user.uid, sentTime: DateTime.now());
+      await _db.addMessageToChat(_chatID, _messageToSend);
+    }
+  }
+  void sendImageMessage()async{
+    try{
+      PlatformFile? _file = await _media.pickImageFromLibrary();
+      if(_file!=null){
+        String? _downloadURL = await _storage.saveChatImageToStorage(_chatID, _auth.user.uid, _file);
+        ChatMessage _messageToSend = ChatMessage(content: _downloadURL!, type: MessageType.IMAGE, senderId: _auth.user.uid, sentTime: DateTime.now());
+        _db.addMessageToChat(_chatID, _messageToSend);
+      }
+
+    }
+    catch(e){
+
+    }
+  }
+  void deleteChat(){
+    goBack();
+    _db.deleteChat(_chatID);
   }
   void goBack(){
     _navigation.goBack();

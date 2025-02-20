@@ -115,6 +115,7 @@ class _ChatsPageState extends State<ChatsPage> {
         subtitle: _subtitleText,
         imagePath: _chat.imageURL(),
         onTap: () {
+          print(_chat.uid);
           _nav.navigateToPage(ChatPage(chat:_chat));
         },
         isActive: _isactive,
