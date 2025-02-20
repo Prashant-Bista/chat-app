@@ -60,10 +60,11 @@ class _ChatPageState extends State<ChatPage> {
                 TopBar(widget.chat.title(),
                   fontsize: 10,
 
-                  primaryAction: IconButton(onPressed: (){
-
+                  primaryAction: IconButton(onPressed: (){_pageProvider.deleteChat();
                   }, icon: Icon(Icons.delete,color: Colors.blue),),
-                  secondaryAction: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back,color: Colors.blue,)),),
+                  secondaryAction: IconButton(onPressed: (){
+                    _pageProvider.goBack();
+                  }, icon: Icon(Icons.arrow_back,color: Colors.blue,)),),
                 _messagesListView(),
                 _sendMessageForm()
               ],
@@ -102,7 +103,7 @@ Widget _sendMessageForm(){
   return Container(
     height: _deviceHeight*0.06,
     decoration: BoxDecoration(
-      color: Colors.transparent,
+
       borderRadius: BorderRadius.circular(10)
     ),
     margin: EdgeInsets.symmetric(horizontal: _deviceWidth*0.04,vertical: _deviceHeight*0.03),
@@ -148,11 +149,13 @@ Widget _sendMessageButton(){
   );
 }
   Widget _imageMessageButton(){
-    double _size = _deviceHeight *0.04;
+    double _size = _deviceHeight *0.05;
     return Container(
       height: _size,
       width: _size,
-      child: FloatingActionButton(onPressed: (){}, backgroundColor:Color.fromRGBO(0, 80, 220, 1.0),child: Icon(Icons.camera_enhance), ),
+      child: FloatingActionButton(onPressed: (){
+        _pageProvider.sendImageMessage();
+      }, backgroundColor:Color.fromRGBO(0, 80, 220, 1.0),child: Icon(Icons.camera_enhance,color: Colors.black,), ),
     );
   }
 

@@ -34,9 +34,17 @@ class CloudStorageService{
     
   }
   Future<String?> saveChatImageToStorage(String _chatID, String _userId, PlatformFile _file) async{
+    UploadTask _task;
+
     try{
     Reference _ref = _stoage.ref().child("images/chats/$_chatID/${_userId}_${Timestamp.now().microsecondsSinceEpoch}.${_file.extension}");
-    UploadTask _task= _ref.putFile(File(_file.path!));
+    UploadTask _task;
+    if(kIsWeb){
+      _task =  _ref.putData(Uint8List.fromList(_file.bytes!));
+    }
+    else{
+      _task =  _ref.putFile(File(_file.path!));
+    }
     return await _task.then((_result)=>_result.ref.getDownloadURL());
   }
   catch(e){

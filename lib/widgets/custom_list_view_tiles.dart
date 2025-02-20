@@ -110,11 +110,11 @@ class CustomChatListViewTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           isOwnMessage
-              ? CircleAvatar(
-                  backgroundImage: NetworkImage(sender.imageURL),
-                  radius: 15,
-                )
-              : Container(),
+              ? Container():CircleAvatar(
+            backgroundImage: NetworkImage(sender.imageURL),
+            radius: 15,
+          )
+          ,
           SizedBox(
             width: width * 0.05,
           ),
