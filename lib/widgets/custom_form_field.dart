@@ -73,7 +73,6 @@ decoration: InputDecoration(
   hintText: hintText,
   hintStyle: TextStyle(color: Colors.white54),
     prefixIcon: Icon(icon,color: Colors.white54,),
-
 ),
     );
   }

@@ -15,21 +15,24 @@ class _HomePageState extends State<HomePage> {
   int _currentPage= 0;
   List<Widget> _pages=[
 ChatsPage(),
-UsersPage()
-  ];
+UsersPage()  ];
   @override
   Widget build(BuildContext context) {
     return _buildUI();
   }
   Widget _buildUI(){
     return Scaffold(
-      body: _pages[_currentPage],
+      body: IndexedStack(
+        index: _currentPage,
+        children: _pages,
+      ),
         bottomNavigationBar: BottomNavigationBar(
           unselectedItemColor: Colors.white,
             currentIndex:_currentPage,
             onTap: (_index){
               setState(() {
                 _currentPage=_index;
+                print(_currentPage);
               });
             },
             items: [

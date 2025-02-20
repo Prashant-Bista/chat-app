@@ -41,7 +41,6 @@ class _ChatsPageState extends State<ChatsPage> {
   }
 
   Widget _buildUI() {
-
     return Builder(builder: (context) {
       _pageProvider = context.watch<ChatsPageProvider>();
       return Scaffold(

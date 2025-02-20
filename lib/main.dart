@@ -1,6 +1,7 @@
 import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/pages/chats_page.dart';
 import 'package:chat_app/pages/splash_page.dart';
+import 'package:chat_app/pages/users_page.dart';
 import 'package:chat_app/providers/authentication_provider.dart';
 import 'package:chat_app/services/navigation_service.dart';
 import 'package:flutter/material.dart';
