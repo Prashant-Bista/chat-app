@@ -47,6 +47,7 @@ class _ChatPageState extends State<ChatPage> {
     return Builder(builder: (context){
       _pageProvider = context.watch<ChatPageProvider>();
       return Scaffold(
+        resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: _deviceWidth*0.03,vertical: _deviceHeight*0.02),
@@ -126,7 +127,7 @@ Widget _sendMessageForm(){
 }
 Widget _messageTextField(){
   return   SizedBox(
-    width: _deviceWidth*0.70,
+    width: _deviceWidth*0.60,
     child: CustomFormField(onSaved: (_value){
       _pageProvider.message=_value;
     }, regEx:r"^(?!\s*$).+", hintText: "Type a message", obscureText: false)

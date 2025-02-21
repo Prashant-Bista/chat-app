@@ -63,6 +63,15 @@ class DatabaseService{
         print(e);
       }
     }
+    Future<DocumentReference?> createChat(Map<String,dynamic> _data) async{
+    try{
+      DocumentReference _chat= await _db.collection(CHAT_COLLECTION).add(_data);
+return _chat;
+    }
+    catch(e){
+      print(e);
+    }
+    }
     Future<void> addMessageToChat(String _chatId, ChatMessage _message) async{
       try{
         await _db.collection(CHAT_COLLECTION).doc(_chatId).collection(MESSAGE_COLLECTION).add(_message.toJson());

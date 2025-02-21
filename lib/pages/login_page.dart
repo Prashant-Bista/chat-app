@@ -34,44 +34,46 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildUI() {
-    return Scaffold(
-      body: Column(
-        children: [
-          Image.asset("assets/images/chatapplogo2.png",
-              height: 200, width: 200),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: deviceWidth * 0.25),
-            width: deviceWidth * 0.9,
-            height: deviceHeight * 0.5,
-            child: Form(
-              key: loginFormKey,
-              child: Column(
-                children: [
-                  CustomFormField(
-                    onSaved: (_value) {
-                      _email = _value;
-                    },
-                    regEx: r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                    hintText: "Email",
-                    obscureText: false,
-                  ),
-                  SizedBox(height: 20),
-                  CustomFormField(
-                    onSaved: (_value) {
-                      _password = _value;
-                    },
-                    regEx: r'.{8,}',
-                    hintText: "Password",
-                    obscureText: true,
-                  ),
-                  SizedBox(height: 20),
-                  _loginButton(),
-                  _registerLink(),
-                ],
+    return Scaffold(resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Image.asset("assets/images/chatapplogo2.png",
+                height: 200, width: 200),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: deviceWidth * 0.25),
+              width: deviceWidth * 0.9,
+              height: deviceHeight * 0.5,
+              child: Form(
+                key: loginFormKey,
+                child: Column(
+                  children: [
+                    CustomFormField(
+                      onSaved: (_value) {
+                        _email = _value;
+                      },
+                      regEx: r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                      hintText: "Email",
+                      obscureText: false,
+                    ),
+                    SizedBox(height: 20),
+                    CustomFormField(
+                      onSaved: (_value) {
+                        _password = _value;
+                      },
+                      regEx: r'.{8,}',
+                      hintText: "Password",
+                      obscureText: true,
+                    ),
+                    SizedBox(height: 20),
+                    _loginButton(),
+                    _registerLink(),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

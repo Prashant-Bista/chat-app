@@ -43,73 +43,76 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildUI() {
     return Scaffold(
-      body: Form(
-        key: _registerFormKey,
-        child: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                    "Register an Account",
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),),
-                    _profileImageField(),
-                SizedBox(height: 20,),
-                SizedBox(
-                  width: _deviceWidth*0.8,
-                  child: CustomFormField(
-                    onSaved: (value) {
-                      _name = value;
-                    },
-                    regEx: r'.{1,}',
-                    hintText: 'Name',
-                    obscureText: false,
-                  ),
-                ),
-                    SizedBox(height: 20,),
-                    SizedBox(
-                      width: _deviceWidth*0.8,
-                      child: CustomFormField(
-                        onSaved: (value) {
-                          _email = value;
-                        },
-                        regEx: r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-                        hintText: 'Email',
-                        obscureText: false,
-                      ),
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
+        child: Form(
+          key: _registerFormKey,
+          child: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                      "Register an Account",
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),),
+                      _profileImageField(),
+                  SizedBox(height: 20,),
+                  SizedBox(
+                    width: _deviceWidth*0.8,
+                    child: CustomFormField(
+                      onSaved: (value) {
+                        _name = value;
+                      },
+                      regEx: r'.{1,}',
+                      hintText: 'Name',
+                      obscureText: false,
                     ),
-                SizedBox(height: 20,),
-                SizedBox(
-                  width: _deviceWidth*0.8,
-                  child: CustomFormField(
-                    onSaved: (value) {
-                      _password = value;
-                    },
-                    regEx: r'.{8,}',
-                    hintText: 'Password',
-                    obscureText: true,
                   ),
-                ),
-                SizedBox(height: 20,),
-                RoundedButton(name: "Register", height: _deviceWidth*0.06, width: _deviceWidth*0.25, onpressed: () async{
-                 if(_registerFormKey.currentState!.validate() && _profileImage!=null){
-                   _registerFormKey.currentState!.save();
-                   print("email:${_email}\npassword:${_password}");
-                   String? _uid= await _authProv.registerUserUsingEmailAndPassword(_email,_password);
-                   String? _imageUrl =await _cloudStorageService.saveUserImageToStorage(_uid!, _profileImage!);
-                   print(_imageUrl);
-                   await _dbService.createUser(_uid, _name, _imageUrl!, _email);
-                   await _authProv.logout();
-
-
-                 }
-                }),
-                SizedBox(height: 20,),
-                _gotoLogin()
-              ]),
+                      SizedBox(height: 20,),
+                      SizedBox(
+                        width: _deviceWidth*0.8,
+                        child: CustomFormField(
+                          onSaved: (value) {
+                            _email = value;
+                          },
+                          regEx: r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                          hintText: 'Email',
+                          obscureText: false,
+                        ),
+                      ),
+                  SizedBox(height: 20,),
+                  SizedBox(
+                    width: _deviceWidth*0.8,
+                    child: CustomFormField(
+                      onSaved: (value) {
+                        _password = value;
+                      },
+                      regEx: r'.{8,}',
+                      hintText: 'Password',
+                      obscureText: true,
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  RoundedButton(name: "Register", height: _deviceWidth*0.06, width: _deviceWidth*0.25, onpressed: () async{
+                   if(_registerFormKey.currentState!.validate() && _profileImage!=null){
+                     _registerFormKey.currentState!.save();
+                     print("email:${_email}\npassword:${_password}");
+                     String? _uid= await _authProv.registerUserUsingEmailAndPassword(_email,_password);
+                     String? _imageUrl =await _cloudStorageService.saveUserImageToStorage(_uid!, _profileImage!);
+                     print(_imageUrl);
+                     await _dbService.createUser(_uid, _name, _imageUrl!, _email);
+                     await _authProv.logout();
+        
+        
+                   }
+                  }),
+                  SizedBox(height: 20,),
+                  _gotoLogin()
+                ]),
+          ),
         ),
       ),
     );

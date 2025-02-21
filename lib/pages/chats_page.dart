@@ -76,7 +76,7 @@ class _ChatsPageState extends State<ChatsPage> {
       if (_chats != null) {
         if (_chats.length != 0) {
           return ListView.builder(
-              itemCount: _chats.length,
+              itemCount: _chats.length-1,
               itemBuilder: (context, index) {
                 return _chatTile(
                   _chats[index],
